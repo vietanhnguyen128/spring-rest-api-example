@@ -19,12 +19,13 @@ public class RequestInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("-------------------");
+
+        // Will reuse later
         String uri = request.getPathInfo();
         String token = request.getParameter("token"); //get parameter from url: ex: /user?token=ABCXYZ
-        System.out.println("Pre Handle method is calling.");
-        System.out.println(uri);
-        System.out.println(token);
+
+//        Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+//        String token = (String) pathVariables.get("token");
 
         if (token != null) {
             Optional<Login> tokenData = Optional.ofNullable(loginService.findByToken(token));

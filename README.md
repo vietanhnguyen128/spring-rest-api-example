@@ -4,3 +4,4 @@
 - 25/12/2020: Add login.
 - 28/12/2020: Add interceptor.
 - 29/12/2020: Switch to Maven.
+- 31/12/2020: Integrate springdoc for API documentation.

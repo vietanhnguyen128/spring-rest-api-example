@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class RequestInterceptorAppConfig implements WebMvcConfigurer {
     @Autowired
@@ -12,7 +15,10 @@ public class RequestInterceptorAppConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(requestInterceptor).excludePathPatterns("/demo/login"); //register interceptor to InterceptorRegistry, without this, Interceptor will not work
+        List<String> pathPatterns = new ArrayList<>();
+        pathPatterns.add("/demo/login");
+        pathPatterns.add("/docs/**");
+        pathPatterns.add("/swagger/**");
+        registry.addInterceptor(requestInterceptor).excludePathPatterns(pathPatterns); //register interceptor to InterceptorRegistry, without this, Interceptor will not work
     }
 }
