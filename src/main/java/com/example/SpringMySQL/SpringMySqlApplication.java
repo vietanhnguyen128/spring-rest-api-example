@@ -19,10 +19,11 @@ public class SpringMySqlApplication {
 	public OpenAPI RestCrudAPI(@Value("${application-version}") String appVersion) {
 		return new OpenAPI()
 				.info(new Info()
-				.title("Sample Rest CRUD API")
-				.version(appVersion)
-				.description("This is a demo REST API with MySQL.")
-				.termsOfService("http://swagger.io/terms/")
-				.license(new License().name("Apache 2.0").url("http://springdoc.org")));
+					.title("Sample Rest CRUD API")
+					.version(appVersion)
+					.description("This is a demo REST API with MySQL.")
+					.termsOfService("http://swagger.io/terms/")
+					.license(new License().name("Apache 2.0").url("http://springdoc.org"))
+				);
 	}
 }

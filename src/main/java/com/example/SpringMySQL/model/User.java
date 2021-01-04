@@ -1,75 +1,48 @@
 package com.example.SpringMySQL.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "user")
 public class User {
+
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
     private Integer id;
 
+    @NotNull
+    @Size(min = 6)
+    @Getter @Setter
     @Column(name = "name")
     private String name;
 
+    @Getter @Setter
+    @Email(message = "Must be a valid email")
     @Column(name = "email")
     private String email;
 
+    @Min(value = 18, message = "Age must be at least 18")
+    @Max(value = 70, message = "Age must not be over 70")
+    @Getter @Setter
     @Column(name = "age")
     private Integer age;
 
     @Column(name = "gender")
+    @Getter @Setter
     private String gender;
 
     @Column(name = "description")
+    @Size(min = 10)
+    @Getter @Setter
     private String description;
 
     public User() {
-
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override

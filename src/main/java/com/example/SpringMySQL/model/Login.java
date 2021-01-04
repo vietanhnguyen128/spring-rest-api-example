@@ -1,5 +1,8 @@
 package com.example.SpringMySQL.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,34 +11,17 @@ public class Login {
 
     @Id
     @Column(name = "username", unique = true)
+    @Getter @Setter
     private String username;
 
+    @Getter @Setter
     @Column(name = "password")
     private String password;
 
     @Column(name = "token")
+    @Getter @Setter
     private String token;
 
     public Login() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

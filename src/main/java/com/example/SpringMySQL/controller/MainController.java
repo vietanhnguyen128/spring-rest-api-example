@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class MainController {
                     content = { @Content(schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content)})
     @PostMapping("/add")
-    public ResponseEntity<User> addNewUser (@RequestBody User user, @RequestParam(name = "token", required = false) String token) {
+    public ResponseEntity<User> addNewUser (@RequestBody @Valid User user, @RequestParam(name = "token", required = false) String token) {
         mainService.createUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -66,7 +67,7 @@ public class MainController {
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
     @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user, @RequestParam(name = "token", required = false) String token) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody @Valid User user, @RequestParam(name = "token", required = false) String token) {
         Optional<User> userData = mainService.findById(id);
 
         if (userData.isPresent()) {
