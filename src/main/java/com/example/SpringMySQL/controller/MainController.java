@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class MainController {
             @ApiResponse(responseCode = "200", description = "User added to database",
                     content = { @Content(schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content)})
-    @PostMapping("/add")
+    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> addNewUser (@RequestBody @Valid User user, @RequestParam(name = "token", required = false) String token) {
         mainService.createUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -39,7 +40,7 @@ public class MainController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = { @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))) }),
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content)})
-    @GetMapping("/user")
+    @GetMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<User>> getAllUsers(@RequestParam(name = "token", required = false) String token) {
         List<User> userData = mainService.findAll();
 
@@ -51,7 +52,7 @@ public class MainController {
             @ApiResponse(responseCode = "200", description = "Found the user", content = { @Content(schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
-    @GetMapping("/user/{id}")
+    @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id, @RequestParam(name = "token", required = false) String token) {
         Optional<User> userData = mainService.findById(id);
 
@@ -66,7 +67,7 @@ public class MainController {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = { @Content(schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
-    @PutMapping("/user/{id}")
+    @PutMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody @Valid User user, @RequestParam(name = "token", required = false) String token) {
         Optional<User> userData = mainService.findById(id);
 

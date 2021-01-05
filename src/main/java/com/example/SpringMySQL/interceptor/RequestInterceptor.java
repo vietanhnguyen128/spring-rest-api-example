@@ -24,13 +24,9 @@ public class RequestInterceptor implements HandlerInterceptor {
         String uri = request.getPathInfo();
         String token = request.getParameter("token"); //get parameter from url: ex: /user?token=ABCXYZ
 
-//        Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-//        String token = (String) pathVariables.get("token");
-
         if (token != null) {
             Optional<Login> tokenData = Optional.ofNullable(loginService.findByToken(token));
             if (tokenData.isPresent()) {
-                System.out.println("Proceed.");
                 return true;
             }
         }
