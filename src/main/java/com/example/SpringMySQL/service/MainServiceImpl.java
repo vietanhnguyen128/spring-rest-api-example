@@ -14,22 +14,27 @@ public class MainServiceImpl implements IMainService {
     @Autowired
     private UserRepository userRepository;
 
+    @Override
     public User createUser(User user) {
         return userRepository.save(user);
     }
 
+    @Override
     public User updateUser(User user) {
         return userRepository.save(user);
     }
 
+    @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+    @Override
     public Optional<User> findById(Integer id) {
         return userRepository.findById(id);
     }
 
+    @Override
     public void deleteById(Integer id) {
         userRepository.deleteById(id);
     }

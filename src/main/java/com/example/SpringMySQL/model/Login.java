@@ -24,4 +24,10 @@ public class Login {
 
     public Login() {
     }
+
+    public Login(String username, String password, String token) {
+        this.username = username;
+        this.password = password;
+        this.token = token;
+    }
 }

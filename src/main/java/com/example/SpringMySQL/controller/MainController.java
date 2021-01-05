@@ -31,7 +31,7 @@ public class MainController {
                     content = { @Content(schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content)})
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> addNewUser (@RequestBody @Valid User user, @RequestParam(name = "token", required = false) String token) {
+    public ResponseEntity<User> addNewUser (@RequestBody @Valid User user) {
         mainService.createUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -41,7 +41,7 @@ public class MainController {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = { @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))) }),
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content)})
     @GetMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<User>> getAllUsers(@RequestParam(name = "token", required = false) String token) {
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> userData = mainService.findAll();
 
         return new ResponseEntity<>(userData, HttpStatus.OK);
@@ -53,7 +53,7 @@ public class MainController {
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
     @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id, @RequestParam(name = "token", required = false) String token) {
+    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         Optional<User> userData = mainService.findById(id);
 
         if (userData.isPresent()) {
@@ -68,7 +68,7 @@ public class MainController {
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
     @PutMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody @Valid User user, @RequestParam(name = "token", required = false) String token) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody @Valid User user) {
         Optional<User> userData = mainService.findById(id);
 
         if (userData.isPresent()) {
@@ -93,7 +93,7 @@ public class MainController {
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Integer id, @RequestParam(name = "token", required = false) String token) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Integer id) {
         if (((Optional<User>) mainService.findById(id)).isPresent()) {
             mainService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.OK);

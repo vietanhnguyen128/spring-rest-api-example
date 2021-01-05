@@ -1,8 +1,10 @@
 package com.example.SpringMySQL.service;
 
 import com.example.SpringMySQL.model.Login;
+import lombok.extern.java.Log;
 
 public interface ILoginService {
-    Login findByUsernameAndPassword(String username, String password);
-    Login findByToken(String token);
+    public abstract Login findByUsernameAndPassword(String username, String password);
+    public abstract Login findByToken(String token);
+    public abstract Login updateLogin(Login login);
 }

@@ -2,14 +2,19 @@ package com.example.SpringMySQL;
 
 import com.example.SpringMySQL.controller.MainController;
 import com.example.SpringMySQL.interceptor.RequestInterceptor;
+import com.example.SpringMySQL.model.Login;
 import com.example.SpringMySQL.model.User;
+import com.example.SpringMySQL.repository.UserRepository;
 import com.example.SpringMySQL.service.LoginServiceImpl;
 import com.example.SpringMySQL.service.MainServiceImpl;
+import org.aspectj.lang.annotation.Before;
+import org.hibernate.mapping.Any;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.Any;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,10 +30,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.Assert;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,7 +48,7 @@ public class MainControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private User user;
+    private UserRepository userRepository;
 
     @MockBean
     private MainServiceImpl mainService;
@@ -52,21 +60,26 @@ public class MainControllerTest {
     private RequestInterceptor requestInterceptor;
 
     @Test
-    public void getUserFromId() throws Exception {
+    public void getAllUsers() throws Exception {
+        User john = new User(1, "John", "john@valve.com", 22, "male", "a");
+        List<User> allUsers = Arrays.asList(john);
 
-        this.mockMvc.perform(get("/demo/user/{id}", 1)
-                .param("token", "6519AAB4C14896CBBF7DEF18D6C2D18C")
-        ).andDo(print())
+        given(mainService.findAll()).willReturn(allUsers);
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true); //to pass the interceptor
+
+        List<User> users = mainService.findAll();
+
+        this.mockMvc.perform(get("/demo/user"))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void getAllUsers() throws Exception {
+    public void createUser() throws Exception {
+        User john = new User(1, "John", "john@valve.com", 22, "male", "a");
 
-        this.mockMvc.perform(get("/demo/user")
-                .param("token", "6519AAB4C14896CBBF7DEF18D6C2D18C")
-        ).andDo(print())
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
+
     }
 }

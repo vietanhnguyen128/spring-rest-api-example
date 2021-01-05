@@ -3,6 +3,7 @@ package com.example.SpringMySQL.interceptor;
 import com.example.SpringMySQL.model.Login;
 import com.example.SpringMySQL.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +31,7 @@ public class RequestInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpStatus.FORBIDDEN.value());
         return false;
     }
 

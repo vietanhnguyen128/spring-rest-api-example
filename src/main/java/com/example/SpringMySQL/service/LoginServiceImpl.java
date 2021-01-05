@@ -21,6 +21,7 @@ public class LoginServiceImpl implements ILoginService {
         return loginRepository.findByToken(token);
     }
 
+    @Override
     public Login updateLogin(Login login) {
         return loginRepository.save(login);
     }
