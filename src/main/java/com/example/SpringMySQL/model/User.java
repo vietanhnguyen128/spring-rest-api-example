@@ -11,7 +11,6 @@ import javax.validation.constraints.*;
 public class User {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
     private Integer id;
@@ -47,6 +46,14 @@ public class User {
 
     public User(@NotNull Integer id, @NotNull @Size(min = 6) String name, @Email(message = "Must be a valid email") String email, @Min(value = 18, message = "Age must be at least 18") @Max(value = 70, message = "Age must not be over 70") Integer age, String gender, @Size(min = 10) String description) {
         this.id = id;
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.gender = gender;
+        this.description = description;
+    }
+
+    public User(@NotNull @Size(min = 6) String name, @Email(message = "Must be a valid email") String email, @Min(value = 18, message = "Age must be at least 18") @Max(value = 70, message = "Age must not be over 70") Integer age, String gender, @Size(min = 10) String description) {
         this.name = name;
         this.email = email;
         this.age = age;

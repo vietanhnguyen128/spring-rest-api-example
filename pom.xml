@@ -63,7 +63,7 @@
             <artifactId>spring-test</artifactId>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

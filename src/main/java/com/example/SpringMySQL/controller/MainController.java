@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Validated
 @RequestMapping("/demo")
 public class MainController {
 
@@ -32,8 +34,8 @@ public class MainController {
             @ApiResponse(responseCode = "403", description = "Token not authorised", content = @Content)})
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> addNewUser (@RequestBody @Valid User user) {
-        mainService.createUser(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        User savedUser = mainService.createUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
     @Operation(summary = "Get all users", description = "Get all users, require token validation before proceed.")
