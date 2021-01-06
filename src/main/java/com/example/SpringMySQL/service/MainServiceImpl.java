@@ -3,6 +3,8 @@ package com.example.SpringMySQL.service;
 import com.example.SpringMySQL.model.User;
 import com.example.SpringMySQL.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +22,22 @@ public class MainServiceImpl implements IMainService {
     }
 
     @Override
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public User updateUser(int id, User user) {
+        Optional<User> userData = this.findById(id);
+
+        if (userData.isPresent()) {
+            User userInfo = userData.get();
+
+            userInfo.setName(user.getName());
+            userInfo.setEmail(user.getEmail());
+            userInfo.setAge(user.getAge());
+            userInfo.setGender(user.getGender());
+            userInfo.setDescription(user.getDescription());
+
+            return userRepository.save(userInfo);
+        }
+
+        return null;
     }
 
     @Override
@@ -35,7 +51,12 @@ public class MainServiceImpl implements IMainService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        userRepository.deleteById(id);
+    public boolean deleteUser(Integer id) {
+        if (((Optional<User>) findById(id)).isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
     }
 }

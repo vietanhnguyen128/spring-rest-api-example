@@ -71,20 +71,11 @@ public class MainController {
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
     @PutMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody @Valid User user) {
-        Optional<User> userData = mainService.findById(id);
 
-        if (userData.isPresent()) {
-            User userInfo = userData.get();
+        User result = mainService.updateUser(id, user);
 
-            userInfo.setName(user.getName());
-            userInfo.setEmail(user.getEmail());
-            userInfo.setAge(user.getAge());
-            userInfo.setGender(user.getGender());
-            userInfo.setDescription(user.getDescription());
-
-            mainService.updateUser(userInfo);
-
-            return new ResponseEntity<>(userInfo, HttpStatus.OK);
+        if (result != null) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -96,8 +87,7 @@ public class MainController {
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
     @DeleteMapping("/user/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Integer id) {
-        if (((Optional<User>) mainService.findById(id)).isPresent()) {
-            mainService.deleteById(id);
+        if (mainService.deleteUser(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

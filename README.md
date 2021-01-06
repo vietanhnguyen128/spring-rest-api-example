@@ -7,3 +7,4 @@
 - 31/12/2020: Integrate springdoc for API documentation.
 - 04/01/2021: Add validation annotation, add Lombok.
 - 05/01/2021: Add some unit tests.
+- 06/01/2021: Add unit tests for input validation.

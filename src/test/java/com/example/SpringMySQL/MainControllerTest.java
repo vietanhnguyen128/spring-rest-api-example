@@ -39,8 +39,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -80,9 +79,9 @@ public class MainControllerTest {
     }
 
     @Test
-    public void createUser() throws Exception {
-        User john = new User("John", "johnvalve.com", 22, "male", "aaaaaaaaaaaa");
-        User validated = new User(1,"John", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+    public void createUserValid() throws Exception {
+        User john = new User("John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+        User validated = new User(1,"John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
 
         given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
         given(mainService.createUser(any())).willReturn(validated);
@@ -93,5 +92,127 @@ public class MainControllerTest {
                 .content(mapper.writeValueAsString(john)))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createUserInvalidName() throws Exception {
+        User john = new User("John", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
+        this.mockMvc.perform(post("/demo/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(john)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createUserInvalidEmail() throws Exception {
+        User john = new User("John Snow", "johnvalve.com", 22, "male", "aaaaaaaaaaaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
+        this.mockMvc.perform(post("/demo/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(john)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createUserInvalidDescription() throws Exception {
+        User john = new User("John", "john@valve.com", 22, "male", "aaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
+        this.mockMvc.perform(post("/demo/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(john)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateUserValid() throws Exception {
+        User johnInput = new User("John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+        User johnOutput = new User(1,"John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        Mockito.when(mainService.updateUser(anyInt(), any(User.class))).thenReturn(johnOutput);
+
+        this.mockMvc.perform(put("/demo/user/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(johnInput)))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateUserInvalidId() throws Exception {
+        User johnInput = new User("John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+        User johnOutput = new User(1,"John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        Mockito.when(mainService.updateUser(anyInt(), any(User.class))).thenReturn(null);
+
+        this.mockMvc.perform(put("/demo/user/{id}", 2)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(johnInput)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void updateUserInvalidName() throws Exception {
+        User johnInput = new User("John", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+        User johnOutput = new User(1,"John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        Mockito.when(mainService.updateUser(anyInt(), any(User.class))).thenReturn(johnOutput);
+
+        this.mockMvc.perform(put("/demo/user/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(johnInput)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateUserInvalidEmail() throws Exception {
+        User johnInput = new User("John Snow", "johnvalve.com", 22, "male", "aaaaaaaaaaaa");
+        User johnOutput = new User(1,"John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        Mockito.when(mainService.updateUser(anyInt(), any(User.class))).thenReturn(johnOutput);
+
+        this.mockMvc.perform(put("/demo/user/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(johnInput)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateUserInvalidDescription() throws Exception {
+        User johnInput = new User("John Snow", "john@valve.com", 22, "male", "aaaa");
+        User johnOutput = new User(1,"John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
+
+        given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        Mockito.when(mainService.updateUser(anyInt(), any(User.class))).thenReturn(johnOutput);
+
+        this.mockMvc.perform(put("/demo/user/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(johnInput)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }
