@@ -84,7 +84,7 @@ public class MainControllerTest {
         User validated = new User(1,"John Snow", "john@valve.com", 22, "male", "aaaaaaaaaaaa");
 
         given(requestInterceptor.preHandle(any(), any(), any())).willReturn(true);
-        given(mainService.createUser(any())).willReturn(validated);
+        given(mainService.createUser(any(User.class))).willReturn(validated);
 
         this.mockMvc.perform(post("/demo/add")
                 .contentType(MediaType.APPLICATION_JSON)
